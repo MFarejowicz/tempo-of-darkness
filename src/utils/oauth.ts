@@ -1,8 +1,6 @@
+import { BASE_URL, CLIENT_ID } from "../constants";
 import { Token, Tokens } from "./oauth-tokens";
 
-export const CLIENT_ID = "38587";
-export const API_KEY = "21eef78849844426a9855a108fc1ba3a";
-export const BASE_URL = "https://www.bungie.net/Platform";
 const TOKEN_URL = `${BASE_URL}/App/OAuth/Token/`;
 
 export function getAccessTokenFromCode(code: string): Promise<Tokens> {
@@ -33,7 +31,6 @@ interface OAuthResponse {
 }
 
 function handleAccessToken(response: OAuthResponse | undefined): Tokens {
-  console.log(response);
   if (response?.access_token) {
     const data = response;
     const inception = Date.now();
