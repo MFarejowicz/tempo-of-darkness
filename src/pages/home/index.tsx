@@ -1,18 +1,23 @@
 import { useContext } from "react";
 import { Login } from "../../components/login";
 import { UserContext } from "../../contexts/user-context";
-import { bungieGet } from "../../utils/bungie-api";
+import { getDestinyProfile, getDestinyStores } from "../../utils/bungie-api";
 
 export const Home = () => {
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser, setProfile } = useContext(UserContext);
 
   const onLogoutClick = () => {
     setUser(null);
   };
 
   const onTestClick = async () => {
-    const res = await bungieGet("/User/GetCurrentBungieNetUser", user);
-    console.log(res);
+    // const res = await bungieGet("/User/GetCurrentBungieNetUser", user);
+    // console.log(res);
+    const test = await getDestinyProfile(user);
+    console.log(test);
+    if (test) {
+      getDestinyStores(user, test);
+    }
   };
 
   return (
