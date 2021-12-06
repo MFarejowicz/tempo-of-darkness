@@ -1,5 +1,10 @@
 import {
-    BungieMembershipType, DestinyComponentType, DestinyLinkedProfilesResponse
+  BungieMembershipType,
+  DestinyCharacterComponent,
+  DestinyComponentType,
+  DestinyLinkedProfilesResponse,
+  DictionaryComponentResponse,
+  ServerResponse,
 } from "bungie-api-ts/destiny2";
 import { API_KEY, BASE_URL } from "../constants";
 import { Tokens } from "./oauth-tokens";
@@ -14,6 +19,10 @@ export interface Profile {
   isCrossSavePrimary: boolean;
   isOverridden: boolean;
   isPublic: boolean;
+}
+
+export interface Characters {
+  [key: string]: DestinyCharacterComponent;
 }
 
 export async function bungieGet(path: string, user: Tokens | null, params?: Record<string, any>) {
@@ -39,14 +48,15 @@ export async function getDestinyProfile(user: Tokens | null) {
     return;
   }
 
-  const response = await bungieGet(
-    `/Destiny2/${BungieMembershipType.BungieNext}/Profile/${user?.bungieMembershipId}/LinkedProfiles/`,
+  const response: ServerResponse<DestinyLinkedProfilesResponse> = await bungieGet(
+    // @ts-ignore
+    `/Destiny2/${BungieMembershipType.BungieNext}/Profile/${user.bungieMembershipId}/LinkedProfiles/`,
     user
   );
 
   // error check here maybe
 
-  const profilesResponse: DestinyLinkedProfilesResponse = response.Response;
+  const profilesResponse = response.Response;
   const profiles: Profile[] = profilesResponse.profiles.map((account) => ({
     displayName: formatBungieName(account),
     membershipId: account.membershipId,
@@ -68,22 +78,24 @@ export async function getDestinyProfile(user: Tokens | null) {
   return sortedProfiles[0];
 }
 
-export async function getDestinyStores(user: Tokens | null, profile: Profile | null) {
-  if (!(user && profile)) {
+interface DestinyCharactersResponse {
+  readonly characters: DictionaryComponentResponse<DestinyCharacterComponent>;
+}
+
+export async function getDestinyCharacters(user: Tokens | null, profile: Profile | null) {
+  if (!user || !profile) {
     return;
   }
 
-  const defaultComponents = [
-    DestinyComponentType.Profiles,
-    DestinyComponentType.ProfileInventories,
-    DestinyComponentType.Characters,
-    DestinyComponentType.CharacterInventories,
-    DestinyComponentType.CharacterEquipment,
-    // TODO: consume this
-    DestinyComponentType.StringVariables,
-  ];
+  const response: ServerResponse<DestinyCharactersResponse> = await bungieGet(
+    `/Destiny2/${profile.membershipType}/Profile/${profile.membershipId}/`,
+    user,
+    {
+      // @ts-ignore
+      components: [DestinyComponentType.Characters],
+    }
+  );
 
-  return bungieGet(`/Destiny2/${profile.membershipType}/Profile/${profile.membershipId}/`, user, {
-    components: defaultComponents.join(","),
-  });
+  const charactersResponse = response.Response;
+  return charactersResponse.characters.data;
 }

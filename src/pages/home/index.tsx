@@ -1,22 +1,24 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Login } from "../../components/login";
 import { UserContext } from "../../contexts/user-context";
-import { getDestinyProfile, getDestinyStores } from "../../utils/bungie-api";
+import { Characters, getDestinyCharacters, getDestinyProfile } from "../../utils/bungie-api";
 
 export const Home = () => {
   const { user, setUser, setProfile } = useContext(UserContext);
+  const [characters, setCharacters] = useState<Characters>();
 
   const onLogoutClick = () => {
     setUser(null);
   };
 
   const onTestClick = async () => {
-    // const res = await bungieGet("/User/GetCurrentBungieNetUser", user);
-    // console.log(res);
-    const test = await getDestinyProfile(user);
-    console.log(test);
-    if (test) {
-      getDestinyStores(user, test);
+    const profile = await getDestinyProfile(user);
+    if (profile) {
+      setProfile(profile);
+      const chars = await getDestinyCharacters(user, profile);
+      if (chars) {
+        setCharacters(chars);
+      }
     }
   };
 
@@ -28,6 +30,13 @@ export const Home = () => {
           <>
             <button onClick={onTestClick}>test auth</button>
             <button onClick={onLogoutClick}>logout</button>
+            {characters &&
+              Object.entries(characters).map(([id, char]) => (
+                <div key={`char-${id}`}>
+                  <div>{char.light}</div>
+                  <img src={`https://bungie.net${char.emblemBackgroundPath}`} />
+                </div>
+              ))}
           </>
         ) : (
           <Login />
