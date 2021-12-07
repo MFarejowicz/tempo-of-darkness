@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+import { ManifestContextManager } from "./contexts/manifest-context";
 import { UserContextManager } from "./contexts/user-context";
 import { Callback } from "./pages/callback";
 import { Home } from "./pages/home";
@@ -8,14 +9,16 @@ import "./App.css";
 export const App = () => {
   return (
     <UserContextManager>
-      <div className="App">
-        <h1>Gaming</h1>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/callback" element={<Callback />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </div>
+      <ManifestContextManager>
+        <div className="App">
+          <h1>Gaming</h1>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/callback" element={<Callback />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
+      </ManifestContextManager>
     </UserContextManager>
   );
 };

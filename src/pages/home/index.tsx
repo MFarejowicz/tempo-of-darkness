@@ -1,9 +1,11 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Login } from "../../components/login";
+import { ManifestContext } from "../../contexts/manifest-context";
 import { UserContext } from "../../contexts/user-context";
 import { Characters, getDestinyCharacters, getDestinyProfile } from "../../utils/bungie-api";
 
 export const Home = () => {
+  const { manifest } = useContext(ManifestContext);
   const { user, setUser, setProfile } = useContext(UserContext);
   const [characters, setCharacters] = useState<Characters>();
 
@@ -17,10 +19,15 @@ export const Home = () => {
       setProfile(profile);
       const chars = await getDestinyCharacters(user, profile);
       if (chars) {
+        console.log(chars);
         setCharacters(chars);
       }
     }
   };
+
+  useEffect(() => {
+    console.log(manifest);
+  }, [manifest]);
 
   return (
     <>
@@ -34,7 +41,7 @@ export const Home = () => {
               Object.entries(characters).map(([id, char]) => (
                 <div key={`char-${id}`}>
                   <div>{char.light}</div>
-                  <img src={`https://bungie.net${char.emblemBackgroundPath}`} />
+                  <img src={`https://bungie.net${char.emblemBackgroundPath}`} alt="char" />
                 </div>
               ))}
           </>

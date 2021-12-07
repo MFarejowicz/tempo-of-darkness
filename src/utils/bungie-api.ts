@@ -3,6 +3,7 @@ import {
   DestinyCharacterComponent,
   DestinyComponentType,
   DestinyLinkedProfilesResponse,
+  DestinyManifest,
   DictionaryComponentResponse,
   ServerResponse,
 } from "bungie-api-ts/destiny2";
@@ -40,6 +41,21 @@ export async function bungieGet(path: string, user: Tokens | null, params?: Reco
       Authorization: "Bearer " + user.accessToken.value,
     },
   }).then((response) => (response.ok ? response.json() : Promise.reject(response)));
+}
+
+export async function getManifest(user: Tokens | null) {
+  if (!user) {
+    console.log("user missing!");
+    return;
+  }
+
+  const response: ServerResponse<DestinyManifest> = await bungieGet("/Destiny2/Manifest/", user);
+  const manifestResponse = response.Response;
+  const manifestLink = manifestResponse.jsonWorldContentPaths["en"];
+
+  const rawManifest = await fetch(`https://www.bungie.net${manifestLink}`);
+  const rawManifestJSON = await rawManifest.json();
+  return rawManifestJSON;
 }
 
 export async function getDestinyProfile(user: Tokens | null) {
