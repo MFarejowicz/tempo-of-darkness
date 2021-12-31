@@ -11,7 +11,6 @@ export const App = () => {
     <UserContextManager>
       <ManifestContextManager>
         <div className="App">
-          <h1>Gaming</h1>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/callback" element={<Callback />} />

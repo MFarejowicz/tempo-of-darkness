@@ -1,0 +1,16 @@
+.Login {
+  font-size: 20px;
+  font-weight: bold;
+  font-stretch: condensed;
+  text-align: center;
+  padding: 10px 30px;
+  background-color: #e8a534;
+  color: black;
+  text-decoration: none;
+  transition: transform 0.4s;
+  will-change: transform;
+}
+
+.Login:hover {
+  transform: scale(1.1);
+}

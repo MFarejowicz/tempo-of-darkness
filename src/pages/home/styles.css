@@ -1,0 +1,46 @@
+.Home {
+  flex: 1;
+  background: radial-gradient(ellipse at center, #d5d5d5 65%, #000000 150%);
+}
+
+.Home-container {
+  padding: 16vh 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Home-test {
+  position: fixed;
+  pointer-events: none;
+  width: 2160px;
+  height: 2160px;
+  left: calc(-1080px + 40vw);
+  top: calc(-1080px + 58vh);
+  background-image: url(../../assets/img/constellations.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0.1;
+  animation: rotate 80s linear infinite;
+  will-change: transform;
+}
+
+.Home-title {
+  font-weight: normal;
+  font-size: 90px;
+}
+
+.Home-text {
+  font-size: 20px;
+  max-width: 572px;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
