@@ -3,14 +3,7 @@
   background: radial-gradient(ellipse at center, #d5d5d5 65%, #000000 150%);
 }
 
-.Home-container {
-  padding: 16vh 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.Home-test {
+.Home-stars {
   position: fixed;
   pointer-events: none;
   width: 2160px;
@@ -23,6 +16,13 @@
   opacity: 0.1;
   animation: rotate 80s linear infinite;
   will-change: transform;
+}
+
+.Home-container {
+  padding: 16vh 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .Home-title {

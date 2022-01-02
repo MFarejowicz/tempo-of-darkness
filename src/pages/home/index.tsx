@@ -39,7 +39,7 @@ export const Home = () => {
 
   return (
     <div className="Home">
-      <div className="Home-test"></div>
+      <div className="Home-stars"></div>
       <div className="Home-container">
         <h1 className="Home-title">Tempo of Darkness</h1>
         {user ? (
